@@ -38,6 +38,7 @@
     "prisma": "^6.19.2",
     "sib-api-v3-sdk": "^8.5.0",
     "socket.io": "^4.5.2",
+    "streamifier": "^0.1.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -50,6 +51,7 @@
     "@types/node": "^22.19.11",
     "@types/nodemailer": "^6.4.5",
     "@types/pg": "^8.16.0",
+    "@types/streamifier": "^0.1.2",
     "@types/uuid": "^8.3.4",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.2",

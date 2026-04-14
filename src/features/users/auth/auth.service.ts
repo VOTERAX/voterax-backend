@@ -13,7 +13,6 @@ class UserAuthService {
 
     constructor() {
         this._encryption = EncryptionRepo
-        
     }
 
     public register = async (data: IUserRegistration) : Promise<{ errors?: ErrorInterface[]; user?:  any }> => {

@@ -13,3 +13,12 @@ export function generateToken(payload: TokenPayload): string {
 
   return jwt.sign(tokenPayload, process.env.USER_JWT_SECRET!,);
 }
+
+export function generateOrgnizerToken(payload: TokenPayload): string {
+  const tokenPayload: TokenPayload = {
+    id: payload.id,
+    email: payload.email,
+  };
+
+  return jwt.sign(tokenPayload, process.env.ORGANIZER_JWT_SECRET!,);
+}

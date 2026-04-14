@@ -81,7 +81,7 @@ function createEmailTemplate(subject: string, body: string): string {
       </div>
       <div class="footer">
         Best regards,<br>
-        <span class="highlight">Confluenxe Team</span>
+        <span class="highlight">Voterax Team</span>
       </div>
     </div>
   </body>
@@ -98,8 +98,8 @@ const emailTemplates = {
     <p>To complete your registration on the Confluenxe App, please use the One-Time Password (OTP) below:</p>
     <h2 class="highlight">${code}</h2>
     <p>This code is valid for the next 15 minutes. Please do not share it with anyone for your security.</p>
-    <p>If you didn’t request this code, please ignore this email or contact our support team immediately at support@confluex.com.ng or 07013580030.</p>
-    <p>Thank you for choosing Confluenxe to stay safe!</p>
+    <p>If you didn’t request this code, please ignore this email or contact our support team immediately at support@voterax.com</p>
+    <p>Thank you for choosing Voterax to stay safe!</p>
     `,
     ),
   forgotPassword: (otp: number) =>
@@ -125,7 +125,7 @@ const emailTemplates = {
       <p>Together, we can create safer communities! If you have any questions or need assistance, feel free to contact us at <a href="mailto:upport@yawaapp.com.ng">support@yawaapp.com.ng</a> or 07013580030.</p>
       <p>
       Staysafe,<br>
-      The Confluenxe Team
+      The Voterax Team
       </p>
       `,
     ),
@@ -140,13 +140,7 @@ async function sendVerificationEmail(
 ): Promise<void> {
   try {
     const html = emailTemplates.verification(emailVerificationCode);
-    // await transporter.sendMail({
-    //   from: '"Confluex TEAM" <info@Confluex.com>',
-    //   to: email,
-    //   subject: 'Your OTP Code for Confluex Registration',
-    //   html,
-    // });
-    sendEmail(email, "Your OTP Code for Confluenxe Registration", html)
+    sendEmail(email, "Your OTP Code for Voterax Registration", html)
     console.log('Verification email sent successfully');
   } catch (error) {
     console.error('Error sending verification email:', error);
@@ -160,12 +154,6 @@ export async function sendForgotPasswordEmail(
   try {
     // Send mail with defined transport object
     const html = emailTemplates.forgotPassword(resetPasswordToken);
-    // await transporter.sendMail({
-    //   from: '"Confluex TEAM" <info@Confluex.com>', // Replace with your app name and your Gmail email address
-    //   to: email,
-    //   subject: 'Forgot Password Verification Code',
-    //   html,
-    // });
 
     sendEmail(email, "Forgot Password Verification Code", html)
     
