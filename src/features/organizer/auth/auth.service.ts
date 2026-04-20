@@ -214,3 +214,39 @@ class OrganzationAuthService {
 }
 
   export default OrganzationAuthService;
+
+
+//   const campaign = await prisma.campaign.create({
+//   data: {
+//     title: "Protocol Government Reform Q3",
+//     category: "BOUNTY",
+//     organizerId: organizer.id,
+//     description: "Help improve governance participation",
+//     startDate: new Date(),
+//     endDate: new Date("2026-08-18"),
+//     treasuryPool: 5000,
+//     cpPerTask: 100,
+
+//     tasks: {
+//       create: [
+//         { title: "Join Discord" },
+//         { title: "Post on Twitter" }
+//       ]
+//     },
+
+//     requirements: {
+//       create: [
+//         { title: "Wallet Connected" },
+//         { title: "Follow on Twitter" }
+//       ]
+//     },
+
+//     rewards: {
+//       create: [
+//         { position: 1, amount: 1000 },
+//         { position: 2, amount: 500 },
+//         { position: 3, amount: 250 }
+//       ]
+//     }
+//   }
+// });

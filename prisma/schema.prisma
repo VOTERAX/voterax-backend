@@ -41,8 +41,104 @@ model Organizer {
   resetPasswordOtp                Int?
   resetPasswordExpires            DateTime?
   resetPasswordRequest            Boolean?       @default(false)
+  campaigns                       Campaign[]
   createdAt                       DateTime      @default(now())
   updatedAt                       DateTime      @updatedAt
 }
 
+model Campaign {
+  id               String      @id @default(uuid())
+  title            String
+  category         CampaignCategory
+  organizerId      String
+  description      String?
 
+  startDate        DateTime?
+  endDate          DateTime?
+
+  treasuryPool     Decimal @db.Decimal(18, 2) @default(0)
+  cpPerTask        Int         @default(0)
+
+  status           CampaignStatus @default(DRAFT)
+
+  organizer        Organizer   @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+
+  requirements     Requirement[]
+  rewards          Reward[]
+  tasks            Task[]
+
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([organizerId])
+  @@index([status])
+  @@index([startDate])
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  type        TaskType?   // future-proof (twitter, discord, etc.)
+  link        String?
+
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([campaignId])
+}
+
+
+model Requirement {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([campaignId])
+}
+
+
+model Reward {
+  id          String    @id @default(uuid())
+  position    String
+  amount      Decimal @db.Decimal(18, 2)
+
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([campaignId, position]) // 🔥 prevents duplicate ranks
+  @@index([campaignId])
+}
+
+enum TaskType {
+  TWITTER
+  DISCORD
+  TELEGRAM
+  CUSTOM
+}
+
+
+enum CampaignCategory {
+  BOUNTY
+  AIRDROP
+  QUEST
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}

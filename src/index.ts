@@ -11,6 +11,7 @@ import { prisma } from "./prisma";
 
 import userAuthRoute from "./features/users/auth/auth.route";
 import organizerAuthRoute from "./features/organizer/auth/auth.route";
+import organizerCampaignRoute from "./features/organizer/campaign/campaign.route";
 
 // import { ISendMessageRequest } from "./shared/types/interfaces/requests/general/meassge.request";
 // import { sendMessage } from "./shared/services/websocket/message.socket";
@@ -77,7 +78,7 @@ app.use(
 );
 
 app.use("/api/v1/user", [userAuthRoute,]);
-app.use("/api/v1/organizer", [organizerAuthRoute,]);
+app.use("/api/v1/organizer", [organizerAuthRoute, organizerCampaignRoute]);
 
 
 
