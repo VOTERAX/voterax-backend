@@ -11,6 +11,10 @@ export const validateFormData = (req: Request, res: Response, next: NextFunction
 
 export const registerParams = [
     body("companyEmail").isEmail(),
+    body("password").notEmpty(),
+];
+
+export const profileParams = [
     body("firstName").notEmpty(),
     body("lastName").notEmpty(),
     body("telegram").notEmpty(),
@@ -21,7 +25,6 @@ export const registerParams = [
     body("industry").notEmpty(),
     body("bio").notEmpty(),
     body("souceOFfund").notEmpty(),
-    body("password").notEmpty(),
     body("userName").notEmpty()
 ];
 
@@ -51,5 +54,6 @@ export const OrganizerAuthValidation = {
     resendEmailParams,
     verifyEmailParams,
     loginParams,
-    resetPasswordParams
+    resetPasswordParams,
+    profileParams
 }

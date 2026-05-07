@@ -4,7 +4,7 @@ import { generateOrgnizerToken, generateToken } from "../../../shared/constant/u
 import { sendForgotPasswordEmail, sendVerificationEmail } from "../../../shared/services/email/nodeMiler";
 import EncryptionRepo from "../../../shared/services/encryption";
 import ErrorInterface from "../../../shared/types/general/error.interface";
-import { IOrganizerLogin, IOrganizerRegistration, IOrganizerReSendEmail, IOrganizerReSetPassword, IOrganizerVerifyEmail } from "../../../shared/types/organizer/organizerAuth.interface";
+import { IOrganizerLogin, IOrganizerRegistration, IOrganizerReSendEmail, IOrganizerReSetPassword, IOrganizerUpdateProfile, IOrganizerVerifyEmail } from "../../../shared/types/organizer/organizerAuth.interface";
 
 const encryption = new EncryptionRepo()
 
@@ -17,21 +17,13 @@ class OrganzationAuthService {
         
     }
 
-    public register = async (data: IOrganizerRegistration, file: {picture: string, logo: string} ) : Promise<{ errors?: ErrorInterface[]; user?:  any }> => {
-        const {companyEmail, firstName, lastName, userName, telegram, companyName, url, companyX, entityName, industry, bio, souceOFfund } = data
-        const {picture, logo} = file
-
+    public register = async (data: IOrganizerRegistration ) : Promise<{ errors?: ErrorInterface[]; user?:  any }> => {
+        const {companyEmail } = data
         const checkEmail = await prisma.organizer.findFirst({
             where: { companyEmail }, // search by unique email
         });
 
         if (checkEmail) return { errors: [{message: "Email already exist"}] };
-
-          const checkUserName = await prisma.organizer.findFirst({
-            where: { userName }, // search by unique email
-        });
-
-        if (checkUserName) return { errors: [{message: "User name already taken"}] };
 
         const hashPassword = this._encryption.encryptPassword(data.password)
 
@@ -46,19 +38,6 @@ class OrganzationAuthService {
             data: {
                 companyEmail,
                 password: hashPassword,
-                firstName,
-                lastName,
-                userName,
-                picture,
-                telegram,
-                companyName,
-                url,
-                companyX,
-                entityName,
-                industry,
-                bio,
-                souceOFfund,
-                logo,
                 emailVerificationCode: otp,
                 emailVerificationCodeExpires: emailVerificationCodeExpires
             }
@@ -211,42 +190,40 @@ class OrganzationAuthService {
         return { user: updateUser };
     }
 
+
+    public profile = async (data: IOrganizerUpdateProfile, file: {picture: string, logo: string}, organizerId: string  ) : Promise<{ errors?: ErrorInterface[]; user?:  any }> => {
+        const { firstName, lastName, userName, telegram, companyName, url, companyX, entityName, industry, bio, souceOFfund } = data
+        const {picture, logo} = file
+
+        const checkUserName = await prisma.organizer.findFirst({
+            where: { userName }, // search by unique email
+        });
+
+        if (checkUserName) return { errors: [{message: "User name already taken"}] };
+
+        const { password, emailVerificationCode, resetPasswordOtp, ...updateUser} = await prisma.organizer.update({
+            where: {id: organizerId},
+            data: {
+                firstName,
+                lastName,
+                userName,
+                picture,
+                telegram,
+                companyName,
+                url,
+                companyX,
+                entityName,
+                industry,
+                bio,
+                souceOFfund,
+                logo,
+            }
+        })
+
+       
+        return { user: updateUser };
+    }
+
 }
 
   export default OrganzationAuthService;
-
-
-//   const campaign = await prisma.campaign.create({
-//   data: {
-//     title: "Protocol Government Reform Q3",
-//     category: "BOUNTY",
-//     organizerId: organizer.id,
-//     description: "Help improve governance participation",
-//     startDate: new Date(),
-//     endDate: new Date("2026-08-18"),
-//     treasuryPool: 5000,
-//     cpPerTask: 100,
-
-//     tasks: {
-//       create: [
-//         { title: "Join Discord" },
-//         { title: "Post on Twitter" }
-//       ]
-//     },
-
-//     requirements: {
-//       create: [
-//         { title: "Wallet Connected" },
-//         { title: "Follow on Twitter" }
-//       ]
-//     },
-
-//     rewards: {
-//       create: [
-//         { position: 1, amount: 1000 },
-//         { position: 2, amount: 500 },
-//         { position: 3, amount: 250 }
-//       ]
-//     }
-//   }
-// });

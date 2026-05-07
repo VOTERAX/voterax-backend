@@ -1,18 +1,5 @@
 export interface IOrganizerRegistration {
-    firstName: string;   
-    lastName: string;      
-    userName: string;            
-    // picture: string;        
-    telegram: string;       
-    companyName: string;   
-    companyEmail: string;  
-    url: string;            
-    companyX: string;       
-    entityName: string;                 
-    industry: string;       
-    bio: string;            
-    souceOFfund: string;    
-    // logo: string;           
+    companyEmail: string;   
     password: string;      
 }
 
@@ -34,4 +21,18 @@ export interface IOrganizerReSetPassword {
     companyEmail: string; 
     otp: number 
     password: string 
+}
+
+export interface IOrganizerUpdateProfile {
+    firstName: string;   
+    lastName: string;      
+    userName: string;            
+    telegram: string;       
+    companyName: string;   
+    url: string;            
+    companyX: string;       
+    entityName: string;                 
+    industry: string;       
+    bio: string;            
+    souceOFfund: string;         
 }

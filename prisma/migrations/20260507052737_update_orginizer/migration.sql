@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Organizer" ALTER COLUMN "firstName" DROP NOT NULL,
+ALTER COLUMN "lastName" DROP NOT NULL,
+ALTER COLUMN "userName" DROP NOT NULL,
+ALTER COLUMN "companyName" DROP NOT NULL;

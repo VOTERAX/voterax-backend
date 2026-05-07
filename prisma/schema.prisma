@@ -20,12 +20,12 @@ model User {
 
 model Organizer {
   id                              String        @id @default(uuid())
-  firstName                       String
-  lastName                        String
-  userName                        String        @unique
+  firstName                       String?
+  lastName                        String?
+  userName                        String?        @unique
   picture                         String?
   telegram                        String?
-  companyName                     String
+  companyName                     String?
   companyEmail                    String        @unique
   url                             String?
   companyX                        String?
