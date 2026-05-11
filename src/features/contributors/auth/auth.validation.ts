@@ -28,10 +28,17 @@ export const loginParams = [
     body("password").notEmpty(),
 ];
 
+export const resetPasswordParams = [
+    body("email").isEmail(),
+    body("otp").notEmpty(),
+    body("password").notEmpty(),
+];
+
 export const AuthValidation = {
     validateFormData,
     registerParams,
     resendEmailParams,
     verifyEmailParams,
     loginParams,
+    resetPasswordParams 
 }

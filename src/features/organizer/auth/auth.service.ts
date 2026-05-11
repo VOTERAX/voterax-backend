@@ -184,8 +184,6 @@ class OrganzationAuthService {
                 password: hashPassword
             }
         })
-
-        sendForgotPasswordEmail(companyEmail, otp)
    
         return { user: updateUser };
     }
