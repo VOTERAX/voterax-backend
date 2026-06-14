@@ -14,6 +14,8 @@ import organizerAuthRoute from "./features/organizer/auth/auth.route";
 import organizerCampaignRoute from "./features/organizer/campaign/campaign.route";
 
 import AdminAuthRoute from "./features/admin/auth/auth.route";
+import AdminCampaignRoute from "./features/admin/campaign/campaign.route";
+import AdminOrganizerRoute from "./features/admin/organizerDetail/organizer.route";
 
 // import { ISendMessageRequest } from "./shared/types/interfaces/requests/general/meassge.request";
 // import { sendMessage } from "./shared/services/websocket/message.socket";
@@ -79,7 +81,7 @@ app.use(
 
 app.use("/api/v1/user", [userAuthRoute,]);
 app.use("/api/v1/organizer", [organizerAuthRoute, organizerCampaignRoute]);
-app.use("/api/v1/admin", [AdminAuthRoute]);
+app.use("/api/v1/admin", [AdminAuthRoute, AdminOrganizerRoute, AdminCampaignRoute]);
 
 
 

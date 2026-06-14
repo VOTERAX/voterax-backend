@@ -188,4 +188,4 @@ class AdminAuthService {
 
 }
 
-  export default AdminAuthService;
+export default AdminAuthService;

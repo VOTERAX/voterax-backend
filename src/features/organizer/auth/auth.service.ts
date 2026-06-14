@@ -1,3 +1,4 @@
+import { OrganizerAccountStatus } from "@prisma/client";
 import { prisma } from "../../../prisma";
 import { generateOTP } from "../../../shared/constant/otp";
 import { generateOrgnizerToken, generateToken } from "../../../shared/constant/userToken";
@@ -118,6 +119,8 @@ class OrganzationAuthService {
         if (!organizer) return { errors: [{message:  "Invalid email or password"}] };
         
         if (!organizer.isEmailVerified) return { errors: [{message:  "Email not verified."}] };
+
+        if (organizer.status !== OrganizerAccountStatus.APPROVED) return { errors: [{message:  "Account not yet approved."}] };
 
         const isPasswordValid =  this._encryption.comparePassword(password, organizer.password)
         if (!isPasswordValid) return { errors: [{message:  "Invalid email or password."}] };

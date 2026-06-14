@@ -3,94 +3,91 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model Admin {
-  id                              String        @id @default(uuid())
-  name                            String?
-  email                           String        @unique
-  password                        String
-  profileImg                      String?         
-  isEmailVerified                 Boolean?      @default(false)
-  emailVerificationCode           Int?
-  emailVerificationCodeExpires    DateTime?
-  resetPasswordOtp                Int?
-  resetPasswordExpires            DateTime?
-  resetPasswordRequest            Boolean?      @default(false)
-  createdAt                       DateTime      @default(now())
-  updatedAt                       DateTime      @updatedAt
+  id                           String    @id @default(uuid())
+  name                         String?
+  email                        String    @unique
+  password                     String
+  profileImg                   String?
+  isEmailVerified              Boolean?  @default(false)
+  emailVerificationCode        Int?
+  emailVerificationCodeExpires DateTime?
+  resetPasswordOtp             Int?
+  resetPasswordExpires         DateTime?
+  resetPasswordRequest         Boolean?  @default(false)
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @updatedAt
 }
 
 model User {
-  id                              String        @id @default(uuid())
-  name                            String?
-  email                           String        @unique
-  password                        String
-  profileImg                      String?         
-  isEmailVerified                 Boolean?      @default(false)
-  emailVerificationCode           Int?
-  emailVerificationCodeExpires    DateTime?
-  resetPasswordOtp                Int?
-  resetPasswordExpires            DateTime?
-  resetPasswordRequest            Boolean?      @default(false)
-  createdAt                       DateTime      @default(now())
-  updatedAt                       DateTime      @updatedAt
+  id                           String            @id @default(uuid())
+  name                         String?
+  email                        String            @unique
+  password                     String
+  profileImg                   String?
+  createdAt                    DateTime          @default(now())
+  updatedAt                    DateTime          @updatedAt
+  emailVerificationCode        Int?
+  emailVerificationCodeExpires DateTime?
+  isEmailVerified              Boolean?          @default(false)
+  resetPasswordExpires         DateTime?
+  resetPasswordOtp             Int?
+  resetPasswordRequest         Boolean?          @default(false)
+  status                       UserAccountStatus @default(ACTIVE)
 }
 
 model Organizer {
-  id                              String        @id @default(uuid())
-  firstName                       String?
-  lastName                        String?
-  userName                        String?        @unique
-  picture                         String?
-  telegram                        String?
-  companyName                     String?
-  companyEmail                    String        @unique
-  url                             String?
-  companyX                        String?
-  entityName                      String?
-  industry                        String?
-  bio                             String?
-  souceOFfund                     String?
-  logo                            String?
-  password                        String
-  isEmailVerified                 Boolean?       @default(false)
-  emailVerificationCode           Int?
-  emailVerificationCodeExpires    DateTime?
-  resetPasswordOtp                Int?
-  resetPasswordExpires            DateTime?
-  resetPasswordRequest            Boolean?       @default(false)
-  campaigns                       Campaign[]
-  createdAt                       DateTime      @default(now())
-  updatedAt                       DateTime      @updatedAt
+  id                           String                 @id @default(uuid())
+  firstName                    String?
+  lastName                     String?
+  userName                     String?                @unique
+  picture                      String?
+  telegram                     String?
+  companyName                  String?
+  companyEmail                 String                 @unique
+  url                          String?
+  companyX                     String?
+  entityName                   String?
+  industry                     String?
+  bio                          String?
+  souceOFfund                  String?
+  logo                         String?
+  password                     String
+  isEmailVerified              Boolean?               @default(false)
+  emailVerificationCode        Int?
+  emailVerificationCodeExpires DateTime?
+  resetPasswordOtp             Int?
+  resetPasswordExpires         DateTime?
+  resetPasswordRequest         Boolean?               @default(false)
+  createdAt                    DateTime               @default(now())
+  updatedAt                    DateTime               @updatedAt
+  status                       OrganizerAccountStatus @default(PENDING)
+  campaigns                    Campaign[]
 }
 
 model Campaign {
-  id               String      @id @default(uuid())
-  title            String
-  category         CampaignCategory
-  organizerId      String
-  description      String?
-
-  startDate        DateTime?
-  endDate          DateTime?
-
-  treasuryPool     Decimal @db.Decimal(18, 2) @default(0)
-  cpPerTask        Int         @default(0)
-
-  status           CampaignStatus @default(DRAFT)
-
-  organizer        Organizer   @relation(fields: [organizerId], references: [id], onDelete: Cascade)
-
-  requirements     Requirement[]
-  rewards          Reward[]
-  tasks            Task[]
-
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  id              String           @id @default(uuid())
+  title           String
+  category        CampaignCategory
+  organizerId     String
+  description     String?
+  startDate       DateTime?
+  endDate         DateTime?
+  treasuryPool    Decimal          @default(0) @db.Decimal(18, 2)
+  cpPerTask       Int              @default(0)
+  status          CampaignStatus   @default(DRAFT)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  approvedByAdmin Boolean?         @default(false)
+  organizer       Organizer        @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  requirements    Requirement[]
+  rewards         Reward[]
+  tasks           Task[]
 
   @@index([organizerId])
   @@index([status])
@@ -101,46 +98,38 @@ model Task {
   id          String    @id @default(uuid())
   title       String
   description String?
-  type        TaskType?   // future-proof (twitter, discord, etc.)
+  type        TaskType?
   link        String?
-
   campaignId  String
-  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 
   @@index([campaignId])
 }
-
 
 model Requirement {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
   description String?
-
   campaignId  String
-  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 
   @@index([campaignId])
 }
 
-
 model Reward {
-  id          String    @id @default(uuid())
-  position    String
-  amount      Decimal @db.Decimal(18, 2)
+  id         String   @id @default(uuid())
+  position   String
+  amount     Decimal  @db.Decimal(18, 2)
+  campaignId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 
-  campaignId  String
-  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@unique([campaignId, position]) // 🔥 prevents duplicate ranks
+  @@unique([campaignId, position])
   @@index([campaignId])
 }
 
@@ -151,7 +140,6 @@ enum TaskType {
   CUSTOM
 }
 
-
 enum CampaignCategory {
   BOUNTY
   AIRDROP
@@ -160,7 +148,20 @@ enum CampaignCategory {
 
 enum CampaignStatus {
   DRAFT
+  PENDING
   ACTIVE
   COMPLETED
   CANCELLED
+}
+
+enum OrganizerAccountStatus {
+  APPROVED
+  PENDING
+  SUSPENDED
+  REJECTED
+}
+
+enum UserAccountStatus {
+  ACTIVE
+  SUSPENDED
 }
