@@ -42,7 +42,7 @@ class CampaignService {
                 },
             }),
 
-            prisma.organizer.count(),
+            prisma.organizer.count({where}),
         ]);
 
         return { data:{

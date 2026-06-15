@@ -86,6 +86,32 @@ class OrganizerCampaignController {
         });
     }
 
+
+    public sendCampigntoAdmin = async (req: Request, res: Response)  => {
+        const {campaignId}  = req.params
+
+        const organizerId = req.organizer?.id!
+        
+        const { data, errors } = await this._OrganzationCampaignService.sendCampignToAdmin(campaignId, organizerId);
+
+        if (errors && errors.length > 0) return res.status(401).json({
+            error: errors,
+            code: 401,
+            status: false
+        });
+    
+        if (data === null) return res.status(401).json({
+            code: 401,
+            status: false
+        });
+    
+        return res.status(200).json({
+            data: data,
+            code: 200,
+            status: true
+        });
+    }
+
     public addTask = async (req: Request, res: Response)  => {
         const body: IAddTask  = req.body
         const organizerId = req.organizer?.id!

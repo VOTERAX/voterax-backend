@@ -1,6 +1,7 @@
 import { prisma } from "../../../prisma";
 import ErrorInterface from "../../../shared/types/general/error.interface";
-import { CampaignPaginationDto, CampaignStatus, IAddReqiurement, IAddReward, IAddTask, ICreateFullCampaign, } from "../../../shared/types/organizer/organizerCampaign.interface";
+import { CampaignPaginationDto, IAddReqiurement, IAddReward, IAddTask, ICreateFullCampaign, } from "../../../shared/types/organizer/organizerCampaign.interface";
+import { CampaignStatus } from "@prisma/client";
 
 class OrganzationCampaignService {
     constructor() { }
@@ -143,6 +144,37 @@ class OrganzationCampaignService {
 
            
         ]);
+
+        return { data: campaign};
+            
+        } catch (error) {
+            console.log("error", error)
+            return {
+                errors: [{message: "Server error"}]
+            };
+        }
+    }
+
+
+    public sendCampignToAdmin = async (campaignId: string, organizerId: string ) : Promise<{ errors?: ErrorInterface[]; data?:  any }> => {
+        try {
+
+            const checkCampaign = await prisma.campaign.findFirst({
+                where: {
+                    organizerId,
+                    id: campaignId
+                },
+            })
+
+            if (!checkCampaign) return { errors: [{message: "Campaign not found"}] };
+
+            const campaign = await prisma.campaign.update({
+                where: {id: checkCampaign.id, organizerId},
+                data: {
+                    status: CampaignStatus.PENDING
+                }
+            })
+       
 
         return { data: campaign};
             

@@ -13,6 +13,7 @@ const organizerCampaignController = new OrganizerCampaignController({organzation
 router.post("/create-compaign", OrganizerAuthMiddleware, OrganizerCampaignValidation.createCampaignParams, OrganizerCampaignValidation.validateFormData, organizerCampaignController.createCampign);
 router.get("/compaigns", OrganizerAuthMiddleware,  organizerCampaignController.getAllCampign);
 router.get("/compaign/:campaignId", OrganizerAuthMiddleware,  organizerCampaignController.getsingleCampign);
+router.get("/send-compaign/:campaignId", OrganizerAuthMiddleware,  organizerCampaignController.sendCampigntoAdmin);
 
 router.post("/add-tasks", OrganizerAuthMiddleware, OrganizerCampaignValidation.AddTaskParams, OrganizerCampaignValidation.validateFormData, organizerCampaignController.addTask);
 router.post("/add-requirements", OrganizerAuthMiddleware, OrganizerCampaignValidation.AddRequirementParams, OrganizerCampaignValidation.validateFormData, organizerCampaignController.addRequirement);
